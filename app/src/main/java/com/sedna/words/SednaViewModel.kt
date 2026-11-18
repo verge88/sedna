@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.sedna.words.data.DictionaryGateway
+import com.sedna.words.data.GeneratedLesson
 import com.sedna.words.data.Recall
 import com.sedna.words.data.SeedCatalog
 import com.sedna.words.data.StudyPreferences
@@ -115,6 +116,26 @@ class SednaViewModel(application: Application) : AndroidViewModel(application) {
                 entries.count { database.add(it) }
             }
             message = "Добавлено слов: $count"
+            refresh()
+        }
+    }
+
+    fun saveLessonWords(lesson: GeneratedLesson) {
+        viewModelScope.launch {
+            val added = withContext(Dispatchers.IO) {
+                lesson.words.count { word ->
+                    database.add(WordDraft(
+                        term = word.term,
+                        translation = word.translation,
+                        definition = word.explanation,
+                        example = word.example,
+                        level = lesson.level,
+                        topic = lesson.topic
+                    ))
+                }
+            }
+            message = if (added > 0) "Добавлено слов из урока: $added"
+                else "Все слова этого урока уже есть в словаре"
             refresh()
         }
     }

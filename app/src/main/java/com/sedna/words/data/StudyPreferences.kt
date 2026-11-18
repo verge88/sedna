@@ -14,6 +14,16 @@ class StudyPreferences(context: Context) {
         get() = prefs.getInt("daily_goal", 15)
         set(value) { prefs.edit().putInt("daily_goal", value.coerceIn(5, 50)).apply() }
 
+    var ollamaEndpoint: String
+        get() = prefs.getString("ollama_endpoint", OllamaLessonGenerator.DEFAULT_ENDPOINT)
+            ?: OllamaLessonGenerator.DEFAULT_ENDPOINT
+        set(value) { prefs.edit().putString("ollama_endpoint", value.take(260)).apply() }
+
+    var ollamaModel: String
+        get() = prefs.getString("ollama_model", OllamaLessonGenerator.DEFAULT_MODEL)
+            ?: OllamaLessonGenerator.DEFAULT_MODEL
+        set(value) { prefs.edit().putString("ollama_model", value.take(100)).apply() }
+
     val todayCount: Int
         get() = if (prefs.getString("today", null) == LocalDate.now().toString())
             prefs.getInt("today_count", 0) else 0

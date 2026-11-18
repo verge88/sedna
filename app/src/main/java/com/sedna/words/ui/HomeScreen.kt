@@ -15,6 +15,7 @@ import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,7 +30,12 @@ import androidx.compose.ui.unit.dp
 import com.sedna.words.SednaViewModel
 
 @Composable
-fun HomeScreen(model: SednaViewModel, onStart: () -> Unit, onExplore: () -> Unit) {
+fun HomeScreen(
+    model: SednaViewModel,
+    onStart: () -> Unit,
+    onExplore: () -> Unit,
+    onLessons: () -> Unit
+) {
     val cards = model.words
     val due = cards.count { it.due() }
     val learned = cards.count { it.learned }
@@ -101,6 +107,22 @@ fun HomeScreen(model: SednaViewModel, onStart: () -> Unit, onExplore: () -> Unit
                     ) {
                         Text(if (due > 0) "Начать повторение" else "Перейти к тренировке")
                         Icon(Icons.Rounded.ArrowForward, null, Modifier.padding(start = 8.dp))
+                    }
+                }
+            }
+        }
+        item {
+            OutlinePanel(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Eyebrow("НОВОЕ / AI-УРОКИ")
+                    Text("Свой урок на любую тему", style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        "Открытая модель Qwen3 подберёт лексику, объяснит значения и составит тест.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedButton(onClick = onLessons, modifier = Modifier.fillMaxWidth()) {
+                        Text("Создать AI-урок")
                     }
                 }
             }

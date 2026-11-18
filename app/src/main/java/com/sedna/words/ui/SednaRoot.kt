@@ -18,11 +18,10 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -46,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sedna.words.SednaViewModel
+import com.sedna.words.LessonViewModel
 
 enum class Tab(val label: String, val icon: ImageVector) {
     HOME("Главная", Icons.Rounded.Home),
@@ -59,6 +59,8 @@ enum class Tab(val label: String, val icon: ImageVector) {
 fun SednaRoot(model: SednaViewModel) {
     var selected by rememberSaveable { mutableStateOf(Tab.HOME) }
     val snackbars = remember { SnackbarHostState() }
+    val lessonModel: LessonViewModel = viewModel()
+    var aiMode by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val speaker = remember { Pronouncer(context) }
     DisposableEffect(speaker) { onDispose { speaker.close() } }
@@ -111,11 +113,39 @@ fun SednaRoot(model: SednaViewModel) {
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
             when (selected) {
-                Tab.HOME -> HomeScreen(model, onStart = { selected = Tab.PRACTICE },
-                    onExplore = { selected = Tab.DISCOVER })
+                Tab.HOME -> HomeScreen(
+                    model,
+                    onStart = { aiMode = false; selected = Tab.PRACTICE },
+                    onExplore = { selected = Tab.DISCOVER },
+                    onLessons = { aiMode = true; selected = Tab.PRACTICE }
+                )
                 Tab.DISCOVER -> DiscoverScreen(model, speaker)
                 Tab.LIBRARY -> LibraryScreen(model, speaker)
-                Tab.PRACTICE -> PracticeScreen(model, speaker, onFind = { selected = Tab.DISCOVER })
+                Tab.PRACTICE -> Column(Modifier.fillMaxSize()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        FilterChip(
+                            selected = !aiMode, onClick = { aiMode = false },
+                            label = { Text("Повторение") }
+                        )
+                        FilterChip(
+                            selected = aiMode, onClick = { aiMode = true },
+                            label = { Text("AI-уроки") }
+                        )
+                    }
+                    Box(Modifier.weight(1f)) {
+                        if (aiMode) {
+                            LessonsScreen(
+                                lessonModel, model, speaker,
+                                onLibrary = { selected = Tab.LIBRARY }
+                            )
+                        } else {
+                            PracticeScreen(model, speaker, onFind = { selected = Tab.DISCOVER })
+                        }
+                    }
+                }
                 Tab.PROFILE -> ProfileScreen(model)
             }
         }

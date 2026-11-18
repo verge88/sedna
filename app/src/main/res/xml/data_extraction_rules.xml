@@ -2,6 +2,7 @@
 <data-extraction-rules>
     <cloud-backup>
         <include domain="database" path="sedna.db" />
+    <include domain="database" path="sedna_lessons.db" />
         <include domain="sharedpref" path="sedna_prefs.xml" />
     </cloud-backup>
     <device-transfer>
