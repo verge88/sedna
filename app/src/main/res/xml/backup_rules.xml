@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <include domain="database" path="sedna.db" />
+    <include domain="database" path="sedna_lessons.db" />
     <include domain="sharedpref" path="sedna_prefs.xml" />
 </full-backup-content>
