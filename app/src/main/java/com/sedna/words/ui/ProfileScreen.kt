@@ -79,8 +79,7 @@ fun ProfileScreen(model: SednaViewModel) {
                         LinearProgressIndicator(
                             progress = { if (words.isEmpty()) 0f else count.toFloat() / words.size },
                             modifier = Modifier.fillMaxWidth().height(5.dp),
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            gapSize = 0.dp, drawStopIndicator = {}
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
                     }
                 }

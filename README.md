@@ -17,7 +17,7 @@
 
 ## Технологии
 
-Kotlin 2.3.20, Android Gradle Plugin 8.13.2, Gradle 8.13, Jetpack Compose BOM 2026.09.00, Material 3, Android ViewModel, coroutines, SQLiteOpenHelper, platform TTS. **minSdk 26, compileSdk 36, targetSdk 35.**
+Kotlin 2.3.20, Android Gradle Plugin 8.13.2, Gradle 8.13, Jetpack Compose BOM 2026.02.01, Material 3, Android ViewModel, coroutines, SQLiteOpenHelper, platform TTS. **minSdk 26, compileSdk 36, targetSdk 35.**
 
 ## Собрать и запустить
 

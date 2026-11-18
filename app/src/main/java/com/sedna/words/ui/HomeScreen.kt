@@ -72,9 +72,7 @@ fun HomeScreen(model: SednaViewModel, onStart: () -> Unit, onExplore: () -> Unit
                         progress = { progress },
                         modifier = Modifier.fillMaxWidth().height(7.dp),
                         color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                        gapSize = 0.dp,
-                        drawStopIndicator = {}
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant
                     )
                     Text("Серия занятий: ${model.streak} дн.",
                         style = MaterialTheme.typography.bodyMedium)
